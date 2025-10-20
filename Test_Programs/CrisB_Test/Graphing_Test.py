@@ -1,7 +1,6 @@
 #Will test PyQt6 Graphs here
 import sys
 
-from PyQt6.QtCore import Qt
 from PySide6 import QtWidgets
 import pyqtgraph as pg  # import PyQtGraph after Qt
 
