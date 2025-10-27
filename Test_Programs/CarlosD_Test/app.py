@@ -1,28 +1,18 @@
-import sys
+import pyqtgraph as pg
+from PyQt6 import QtWidgets
 
-from PyQt6.QtCore import QSize, Qt
-from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton
-
-
-# Subclass QMainWindow to customize your application's main window
-class MainWindow(QMainWindow):
+class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle("My App")
+        # Temperature vs time plot
+        self.plot_graph = pg.PlotWidget()
+        self.setCentralWidget(self.plot_graph)
+        minutes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        temperature = [30, 32, 34, 32, 33, 31, 29, 32, 35, 30]
+        self.plot_graph.plot(minutes, temperature)
 
-        button = QPushButton("Press Me!")
-
-        self.setFixedSize(QSize(400, 300))
-
-        # Set the central widget of the Window.
-        self.setCentralWidget(button)
-
-
-app = QApplication(sys.argv)
-
-window = MainWindow()
-window.show()
-
+app = QtWidgets.QApplication([])
+main = MainWindow()
+main.show()
 app.exec()
-
