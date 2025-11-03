@@ -1,6 +1,7 @@
 import sys
 
 from PySide6 import QtWidgets, QtCore, QtGui
+#from PyQt6.QtWidgets import QCheckBox
 import pyqtgraph as pg  
 import numpy as np
 
@@ -22,25 +23,36 @@ class MainWindow(QtWidgets.QMainWindow):
         self.graphWidget.setLabel('bottom', 'Time (seconds)')
 
         redpen = pg.mkPen(color = (255,0,0), width = 10) #pen style variable
+        greenpen = pg.mkPen(color = (0, 255, 0), width = 10) #pen style variable
+
     
 
         #Reading data from flight logs CSV
         flightlogs = np.loadtxt("\\Users\\cbres\\OneDrive\\Documents\\ProgrammingProjects\\FIU_SEDS\\2025-2026_Dashboard\\Orbiview_v2\\Flight_Test_Data\\Flight_Data_2025-04-12_10-59-03 copy.csv", delimiter=",", skiprows=1)
         rows = np.arange(1, 21) #makes list of numbers from as (a, b) to include from a to b-1
+        time_elapsed = flightlogs[0:20, 6]
         flightlogs[0:20, 6] = rows
         accel_y = flightlogs[0:20, 1]
-        time_elapsed = flightlogs[0:20, 6]
 
-        #print(accel_y)
-        #print(time_elapsed)
+        accel_x = flightlogs[0:20, 0]
 
-        
-        self.curve = self.graphWidget.plot(time_elapsed, accel_y, pen=redpen, symbol = 'o', symbolsize = 20, symbolBrush = "black")
-        self.curve_visible = True #Tracks visibility
+
+
+
+        #Create the Legend
+        legend = self.graphWidget.addLegend()
+        legend.setBrush(pg.mkBrush(30, 30, 30, 200))       # background color (RGBA)
+        legend.setPen(pg.mkPen(color='white', width=2))    # border color + thickness
+
+
+        self.curve = self.graphWidget.plot(time_elapsed, accel_y, pen=redpen, name = "Accel_y", symbol = 'o', symbolsize = 20, symbolBrush = "black")
+        self.Ycurve_visible = True #Tracks visibility
+
+        self.Xcurve = self.graphWidget.plot(time_elapsed, accel_x, pen=greenpen, name = "Accel_x", symbol = 'o', symbolsize = 20, symbolBrush = "white")
 
 
         # === Toggle Button ===
-        self.curve_visible = True #Tracks visibility
+        self.Ycurve_visible = True #Tracks visibility
         self.toggle_button = QtWidgets.QPushButton("Hide Line", self.graphWidget)
         self.toggle_button.setStyleSheet("""
             QPushButton {
@@ -58,15 +70,19 @@ class MainWindow(QtWidgets.QMainWindow):
         self.toggle_button.setFixedSize(80, 25)
         self.toggle_button.clicked.connect(self.toggle_curve)
 
+        #self.toggle_check = QCheckBox()
+        #self.toggle_check.setStyleSheet()
+
     def toggle_curve(self, event):
         #Toggles the line's visibility when the line itself is clicked.
-        if self.curve_visible == True:
+        if self.Ycurve_visible == True:
             self.graphWidget.removeItem(self.curve)
             self.toggle_button.setText("Show Line")
         else:
             self.graphWidget.addItem(self.curve)
             self.toggle_button.setText("Hide Line")
-        self.curve_visible = not self.curve_visible
+        self.Ycurve_visible = not self.Ycurve_visible
+
 
 
         
