@@ -57,7 +57,7 @@ class Graph(QMainWindow):
             return
 
         print(f"Loaded CSV: {file_path}")
-        print(f"Rows: {len(self.df)} Columns: {list(self.df.columns)}")
+        print(f"Columns: {list(self.df.columns)}")
 
         self.plot_btn.setEnabled(True)
 
