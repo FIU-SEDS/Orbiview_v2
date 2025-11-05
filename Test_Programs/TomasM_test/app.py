@@ -1,4 +1,4 @@
-
+from PySide6 import QtWidgets
 from PySide6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, QPushButton, QFileDialog, QLabel, QHBoxLayout)
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
@@ -46,6 +46,23 @@ class Graph(QMainWindow):
         self.canvas = FigureCanvas(self.figure)
         layout.addWidget(self.canvas)
 
+        self.toggle_button = QtWidgets.QPushButton("Hide Acceleration Y", self.centralWidget)
+        self.toggle_button.setStyleSheet("""
+            QPushButton {
+                    background-color: #444;
+                    color: white;
+                    border: 1px solid #888;
+                    border-radius: 6px;
+                    padding: 5px 10px;
+                }
+                QPushButton:hover {
+                    background-color: #666;
+                }
+            f""")
+        self.toggle_button.move(1000, 20)
+        self.toggle_button.setFixedSize(80, 25)
+        self.toggle_button.clicked.connect(self.toggle_curve)
+
     def load_csv(self):
         file_path, _ = QFileDialog.getOpenFileName(self, "Open CSV File", "", "CSV Files (*.csv);;All Files (*)")
         if not file_path:
@@ -60,6 +77,16 @@ class Graph(QMainWindow):
         print(f"Columns: {list(self.df.columns)}")
 
         self.plot_btn.setEnabled(True)
+
+    def toggle_curve(self, event):
+        if self.curve_visible == True:
+            self.central_widget.removeItem(self.curve)
+            self.toggle_button.setText("Display Values")
+        else:
+            self.central_widget.addItem(self.curve)
+            self.toggle_button.setText("Hide Values")
+        self.curve_visible = not self.curve_visible
+    
 
     def plot_graph(self):
         if self.df is None:
@@ -83,7 +110,7 @@ class Graph(QMainWindow):
             subp.tick_params(axis='x', rotation=45)
             self.figure.tight_layout()
             self.canvas.draw()
-            print("graph has been successfully plotted!")
+            print("Graph has been successfully plotted!")
         except Exception as e:
             print(f"Error plotting: {e}")
 
@@ -92,3 +119,4 @@ if __name__ == "__main__":
     window = Graph()
     window.show()
     sys.exit(app.exec())
+
