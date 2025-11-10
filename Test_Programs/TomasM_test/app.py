@@ -69,9 +69,11 @@ class Graph(QMainWindow):
         time_col = "time_elapsed"
         value_col = "acceleration_y"
 
+        # __ over ___ function
         if time_col not in self.df.columns or value_col not in self.df.columns:
             print(f"Required columns not found: need '{time_col}' and '{value_col}'")
             return
+
 
         try:
             self.figure.clear()
