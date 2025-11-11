@@ -3,18 +3,26 @@ import sys
 from PySide6 import QtWidgets, QtCore, QtGui
 import pyqtgraph as pg  
 import numpy as np
+import os
+
+#get the folder where flight data is
+script_dir = os.path.dirname(os.path.abspath(__file__))
 
 #Reading data from flight logs CSV
-flightlogs = np.loadtxt("\\Users\\cbres\\OneDrive\\Documents\\ProgrammingProjects\\FIU_SEDS\\2025-2026_Dashboard\\Orbiview_v2\\Flight_Test_Data\\Flight_Data_2025-04-12_10-59-03 copy.csv", delimiter=",", skiprows=1)
+file_path = os.path.join(script_dir, "..", "..", "Flight_Test_Data", "Flight_Data_2025-04-12_10-59-03 copy.csv")
+file_path = os.path.abspath(file_path)  # Make CSV file path absolute
+flightlogs = np.loadtxt(file_path, delimiter=",", skiprows=1)
+
 rows = np.arange(1, 21) #makes list of numbers from as (a, b) to include from a to b-1
 time_elapsed = flightlogs[0:20, 6]
 flightlogs[0:20, 6] = rows
 accel_y = flightlogs[0:20, 1]
 accel_x = flightlogs[0:20, 0]
 
-redpen = pg.mkPen(color = (255,0,0), width = 10) #pen style variable
-greenpen = pg.mkPen(color = (0, 255, 0), width = 10) #pen style variable
-transparentpen = pg.mkPen(color = (255,0,0,0), width = 10) #pen style variable
+#Curve pen styles
+redpen = pg.mkPen(color = (255,0,0), width = 10) 
+greenpen = pg.mkPen(color = (0, 255, 0), width = 10) 
+transparentpen = pg.mkPen(color = (255,0,0,0), width = 10) #Makes curves "invisible"
 
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
@@ -34,18 +42,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.graphWidget.setLabel('left','Acceleration (mGal)')
         self.graphWidget.setLabel('bottom', 'Time (seconds)')
 
-        #Reading data from flight logs CSV
-        flightlogs = np.loadtxt("\\Users\\cbres\\OneDrive\\Documents\\ProgrammingProjects\\FIU_SEDS\\2025-2026_Dashboard\\Orbiview_v2\\Flight_Test_Data\\Flight_Data_2025-04-12_10-59-03 copy.csv", delimiter=",", skiprows=1)
-        rows = np.arange(1, 21) #makes list of numbers from as (a, b) to include from a to b-1
-        time_elapsed = flightlogs[0:20, 6]
-        flightlogs[0:20, 6] = rows
-        accel_y = flightlogs[0:20, 1]
-
-        accel_x = flightlogs[0:20, 0]
-
-
-
-
         #Create the Legend
         legend = self.graphWidget.addLegend()
         legend.setBrush(pg.mkBrush(30, 30, 30, 200))       # background color (RGBA)
@@ -58,9 +54,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.Xcurve = self.graphWidget.plot(time_elapsed, accel_x, pen=greenpen, name = "Accel_x", symbol = 'o', symbolsize = 20, symbolBrush = "white")
         
 
-
         # === Toggle Button ===
-
         
         # self.Ycurve_visible = True #Tracks visibility
         # self.toggle_button = QtWidgets.QPushButton("Hide Line", self.graphWidget)
@@ -105,7 +99,7 @@ class MainWindow(QtWidgets.QMainWindow):
         if self.Ycurve_visible == True:
             #self.graphWidget.removeItem(self.curve)
             self.curve.setPen(transparentpen)
-            self.curve.setSymbol(None)
+            self.curve.setSymbol(None) #symbol also disssapears here
             self.check_toggle.setText("Show Line")
         else:
             #self.graphWidget.addItem(self.curve)
@@ -113,8 +107,6 @@ class MainWindow(QtWidgets.QMainWindow):
             self.check_toggle.setText("Hide Line")
             self.curve.setSymbol('o')
         self.Ycurve_visible = not self.Ycurve_visible
-
-
 
         
 app = QtWidgets.QApplication(sys.argv)
