@@ -4,6 +4,18 @@ from PySide6 import QtWidgets, QtCore, QtGui
 import pyqtgraph as pg  
 import numpy as np
 
+#Reading data from flight logs CSV
+flightlogs = np.loadtxt("\\Users\\cbres\\OneDrive\\Documents\\ProgrammingProjects\\FIU_SEDS\\2025-2026_Dashboard\\Orbiview_v2\\Flight_Test_Data\\Flight_Data_2025-04-12_10-59-03 copy.csv", delimiter=",", skiprows=1)
+rows = np.arange(1, 21) #makes list of numbers from as (a, b) to include from a to b-1
+time_elapsed = flightlogs[0:20, 6]
+flightlogs[0:20, 6] = rows
+accel_y = flightlogs[0:20, 1]
+accel_x = flightlogs[0:20, 0]
+
+redpen = pg.mkPen(color = (255,0,0), width = 10) #pen style variable
+greenpen = pg.mkPen(color = (0, 255, 0), width = 10) #pen style variable
+transparentpen = pg.mkPen(color = (255,0,0,0), width = 10) #pen style variable
+
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
@@ -21,11 +33,6 @@ class MainWindow(QtWidgets.QMainWindow):
         styles = {'color':'white','font-size':'20pt'} #not working when implemented???
         self.graphWidget.setLabel('left','Acceleration (mGal)')
         self.graphWidget.setLabel('bottom', 'Time (seconds)')
-
-        redpen = pg.mkPen(color = (255,0,0), width = 10) #pen style variable
-        greenpen = pg.mkPen(color = (0, 255, 0), width = 10) #pen style variable
-
-    
 
         #Reading data from flight logs CSV
         flightlogs = np.loadtxt("\\Users\\cbres\\OneDrive\\Documents\\ProgrammingProjects\\FIU_SEDS\\2025-2026_Dashboard\\Orbiview_v2\\Flight_Test_Data\\Flight_Data_2025-04-12_10-59-03 copy.csv", delimiter=",", skiprows=1)
@@ -96,11 +103,15 @@ class MainWindow(QtWidgets.QMainWindow):
     def toggle_curve(self, event):
         #Toggles the line's visibility when the line itself is clicked.
         if self.Ycurve_visible == True:
-            self.graphWidget.removeItem(self.curve)
+            #self.graphWidget.removeItem(self.curve)
+            self.curve.setPen(transparentpen)
+            self.curve.setSymbol(None)
             self.check_toggle.setText("Show Line")
         else:
-            self.graphWidget.addItem(self.curve)
+            #self.graphWidget.addItem(self.curve)
+            self.curve.setPen(redpen)
             self.check_toggle.setText("Hide Line")
+            self.curve.setSymbol('o')
         self.Ycurve_visible = not self.Ycurve_visible
 
 
