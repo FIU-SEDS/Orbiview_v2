@@ -46,7 +46,9 @@ class Graph(QMainWindow):
         self.canvas = FigureCanvas(self.figure)
         layout.addWidget(self.canvas)
 
+    #csv loading function
     def load_csv(self):
+        #enables user to find csv files 
         file_path, _ = QFileDialog.getOpenFileName(self, "Open CSV File", "", "CSV Files (*.csv);;All Files (*)")
         if not file_path:
             return
