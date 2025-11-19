@@ -29,6 +29,8 @@ class MainWindow(QWidget, Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
         
+        self.zoomed_in = False
+
         #Window resize - could work some functionality later?
         self.gridLayoutWidget.resize(1280, 720)
         self.resize(1280, 720)
@@ -40,10 +42,27 @@ class MainWindow(QWidget, Ui_MainWindow):
         x_velocity_curve = self.Graph1.plot(time_elapsed, x_velocity, pen=pg.mkPen(color=(255, 0, 0), width=2), name="X Velocity")
 
     def ZoomResize(self):
-        self.ZoomButton1.clicked.connect(self.Zoom_In)
+        self.ZoomButton1.clicked.connect(lambda: self.Zoom_Change(self.ZoomButton1, self.Graph1))
+        self.ZoomButton3.clicked.connect(lambda: self.Zoom_Change(self.ZoomButton3, self.Graph2)) #Wrong button placed
+        self.ZoomButton2.clicked.connect(lambda: self.Zoom_Change(self.ZoomButton2, self.Graph3)) #Wrong button placed
+        self.ZoomButton4.clicked.connect(lambda: self.Zoom_Change(self.ZoomButton4, self.Graph4))
     
-    def Zoom_In(self):
-        self.Graph1.resize(1280, 720)
+    def Zoom_Change(self, selectedButton, selectedGraph):
+        keep_widgets = {selectedButton, selectedGraph, self.centralwidget, self.gridLayoutWidget}
+
+        if self.zoomed_in == False:
+            # Iterate over all child widgets in the window
+            for widgets in self.findChildren(QWidget):
+                if widgets not in keep_widgets and widgets not in selectedGraph.findChildren(QWidget):
+                    widgets.setVisible(False)
+            selectedButton.setText("Zoom Out")
+
+        if self.zoomed_in == True:
+            for widgets in self.findChildren(QWidget):
+                widgets.setVisible(True)
+            selectedButton.setText("Zoom In")
+
+        self. zoomed_in = not self.zoomed_in
 
 
 app = QApplication(sys.argv)
