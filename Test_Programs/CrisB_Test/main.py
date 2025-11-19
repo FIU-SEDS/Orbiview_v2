@@ -34,11 +34,17 @@ class MainWindow(QWidget, Ui_MainWindow):
         self.resize(1280, 720)
 
         self.plot()
+        self.ZoomResize()
 
     def plot(self):
         x_velocity_curve = self.Graph1.plot(time_elapsed, x_velocity, pen=pg.mkPen(color=(255, 0, 0), width=2), name="X Velocity")
+
+    def ZoomResize(self):
+        self.ZoomButton1.clicked.connect(self.Zoom_In)
     
-        
+    def Zoom_In(self):
+        self.Graph1.resize(1280, 720)
+
 
 app = QApplication(sys.argv)
 window = MainWindow()
