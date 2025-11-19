@@ -36,18 +36,29 @@ class MainWindow(QWidget, Ui_MainWindow):
         self.resize(1280, 720)
 
         self.plot()
-        self.ZoomResize()
+        self.zoomResize()
 
     def plot(self):
-        x_velocity_curve = self.Graph1.plot(time_elapsed, x_velocity, pen=pg.mkPen(color=(255, 0, 0), width=2), name="X Velocity")
+        #Couple of suggestion: Graph titles, Axes titles (and units), grid lines
+        #When UI file is done, implement these suggestions in UI file
 
-    def ZoomResize(self):
-        self.ZoomButton1.clicked.connect(lambda: self.Zoom_Change(self.ZoomButton1, self.Graph1))
-        self.ZoomButton3.clicked.connect(lambda: self.Zoom_Change(self.ZoomButton3, self.Graph2)) #Wrong button placed
-        self.ZoomButton2.clicked.connect(lambda: self.Zoom_Change(self.ZoomButton2, self.Graph3)) #Wrong button placed
-        self.ZoomButton4.clicked.connect(lambda: self.Zoom_Change(self.ZoomButton4, self.Graph4))
+        #Graph 1 - Directional velocities
+        x_velocity_curve = self.Graph1.plot(time_elapsed, x_velocity, pen=pg.mkPen(color=(255, 0, 0), width=2), name="X Velocity")
+        y_velocity_curve = self.Graph1.plot(time_elapsed, y_velocity, pen=pg.mkPen(color=(0, 255, 0), width=2), name="Y Velocity")
+        z_velocity_curve = self.Graph1.plot(time_elapsed, z_velocity, pen=pg.mkPen(color=(0, 0, 255), width=2), name="Z Velocity")
+
+
+    def filterCurvies(self):
+        pass
+
+
+    def zoomResize(self):
+        self.ZoomButton1.clicked.connect(lambda: self.zoom_change(self.ZoomButton1, self.Graph1))
+        self.ZoomButton3.clicked.connect(lambda: self.zoom_change(self.ZoomButton3, self.Graph2)) #Wrong button in UI file
+        self.ZoomButton2.clicked.connect(lambda: self.zoom_change(self.ZoomButton2, self.Graph3)) #Wrong button in UI file
+        self.ZoomButton4.clicked.connect(lambda: self.zoom_change(self.ZoomButton4, self.Graph4))
     
-    def Zoom_Change(self, selectedButton, selectedGraph):
+    def zoom_change(self, selectedButton, selectedGraph):
         keep_widgets = {selectedButton, selectedGraph, self.centralwidget, self.gridLayoutWidget}
 
         if self.zoomed_in == False:
@@ -62,7 +73,7 @@ class MainWindow(QWidget, Ui_MainWindow):
                 widgets.setVisible(True)
             selectedButton.setText("Zoom In")
 
-        self. zoomed_in = not self.zoomed_in
+        self.zoomed_in = not self.zoomed_in
 
 
 app = QApplication(sys.argv)

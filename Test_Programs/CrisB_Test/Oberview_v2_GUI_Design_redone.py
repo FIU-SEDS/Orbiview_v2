@@ -32,6 +32,7 @@ class Ui_MainWindow(object):
         self.Graph3 = PlotWidget(parent=self.gridLayoutWidget)
         self.Graph3.setObjectName("Graph3")
         self.gridLayout.addWidget(self.Graph3, 2, 0, 1, 1)
+        #Comment: Consider changing color temporarily for buttons on press. Do it in UI file later.
         self.ZoomButton1 = QtWidgets.QPushButton(parent=self.gridLayoutWidget)
         self.ZoomButton1.setStyleSheet("background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);")
         self.ZoomButton1.setObjectName("ZoomButton1")
@@ -104,7 +105,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_5.setStretch(1, 10)
         self.horizontalLayout_6.addLayout(self.horizontalLayout_5)
         self.gridLayout.addWidget(self.Graph1, 0, 0, 1, 1)
-        #MainWindow.setCentralWidget(self.centralwidget)
+        #MainWindow.setCentralWidget(self.centralwidget) <-- Does not work
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -112,7 +113,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.ZoomButton1.setText(_translate("MainWindow", "Zoom In"))
+        self.ZoomButton1.setText(_translate("MainWindow", "Zoom In")) #Forgot to put correct text in actual UI file, change in Qt Designer later
         self.ZoomButton2.setText(_translate("MainWindow", "Zoom In"))
         self.ZoomButton3.setText(_translate("MainWindow", "Zoom In"))
         self.ZoomButton4.setText(_translate("MainWindow", "Zoom In"))
