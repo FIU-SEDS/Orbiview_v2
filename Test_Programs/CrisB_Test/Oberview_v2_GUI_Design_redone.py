@@ -32,21 +32,35 @@ class Ui_MainWindow(object):
         self.Graph3 = PlotWidget(parent=self.gridLayoutWidget)
         self.Graph3.setObjectName("Graph3")
         self.gridLayout.addWidget(self.Graph3, 2, 0, 1, 1)
-        #Comment: Consider changing color temporarily for buttons on press. Do it in UI file later.
+
+        #Comment: Selection colors are unncecessary can remove later
+        #Comment: Will remove 4th graph to replace with telemetry data later (on UI design)
         self.ZoomButton1 = QtWidgets.QPushButton(parent=self.gridLayoutWidget)
-        self.ZoomButton1.setStyleSheet("background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);")
+        self.ZoomButton1.setStyleSheet("color: rgb(0, 0, 0);\n"
+        "background-color: rgb(255, 255, 255);\n"
+        "selection-background-color: rgb(0, 0, 255);\n"
+        "selection-color: rgb(255, 255, 255);")
         self.ZoomButton1.setObjectName("ZoomButton1")
         self.gridLayout.addWidget(self.ZoomButton1, 1, 0, 1, 1)
-        self.ZoomButton2 = QtWidgets.QPushButton(parent=self.gridLayoutWidget)
-        self.ZoomButton2.setStyleSheet("background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);")
-        self.ZoomButton2.setObjectName("ZoomButton2")
-        self.gridLayout.addWidget(self.ZoomButton2, 3, 0, 1, 1)
         self.ZoomButton3 = QtWidgets.QPushButton(parent=self.gridLayoutWidget)
-        self.ZoomButton3.setStyleSheet("background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);")
+        self.ZoomButton3.setStyleSheet("color: rgb(0, 0, 0);\n"
+        "background-color: rgb(255, 255, 255);\n"
+        "selection-background-color: rgb(0, 0, 255);\n"
+        "selection-color: rgb(255, 255, 255);")
         self.ZoomButton3.setObjectName("ZoomButton3")
-        self.gridLayout.addWidget(self.ZoomButton3, 1, 2, 1, 1)
+        self.gridLayout.addWidget(self.ZoomButton3, 3, 0, 1, 1)
+        self.ZoomButton2 = QtWidgets.QPushButton(parent=self.gridLayoutWidget)
+        self.ZoomButton2.setStyleSheet("color: rgb(0, 0, 0);\n"
+        "background-color: rgb(255, 255, 255);\n"
+        "selection-background-color: rgb(0, 0, 255);\n"
+        "selection-color: rgb(255, 255, 255);")
+        self.ZoomButton2.setObjectName("ZoomButton2")
+        self.gridLayout.addWidget(self.ZoomButton2, 1, 2, 1, 1)
         self.ZoomButton4 = QtWidgets.QPushButton(parent=self.gridLayoutWidget)
-        self.ZoomButton4.setStyleSheet("background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);")
+        self.ZoomButton4.setStyleSheet("color: rgb(0, 0, 0);\n"
+        "background-color: rgb(255, 255, 255);\n"
+        "selection-background-color: rgb(0, 0, 255);\n"
+        "selection-color: rgb(255, 255, 255);")
         self.ZoomButton4.setObjectName("ZoomButton4")
         self.gridLayout.addWidget(self.ZoomButton4, 3, 2, 1, 1)
         self.Graph1 = PlotWidget(parent=self.gridLayoutWidget)
@@ -105,7 +119,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_5.setStretch(1, 10)
         self.horizontalLayout_6.addLayout(self.horizontalLayout_5)
         self.gridLayout.addWidget(self.Graph1, 0, 0, 1, 1)
-        #MainWindow.setCentralWidget(self.centralwidget) <-- Does not work
+        #MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -113,9 +127,9 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.ZoomButton1.setText(_translate("MainWindow", "Zoom In")) #Forgot to put correct text in actual UI file, change in Qt Designer later
-        self.ZoomButton2.setText(_translate("MainWindow", "Zoom In"))
+        self.ZoomButton1.setText(_translate("MainWindow", "Zoom In"))
         self.ZoomButton3.setText(_translate("MainWindow", "Zoom In"))
+        self.ZoomButton2.setText(_translate("MainWindow", "Zoom In"))
         self.ZoomButton4.setText(_translate("MainWindow", "Zoom In"))
         self.checkBox_4.setToolTip(_translate("MainWindow", "<html><head/><body><p><span style=\" font-weight:600;\">Curve Y</span></p></body></html>"))
         self.label.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-weight:600; color:#ffffff;\">Curve Y</span></p></body></html>"))
