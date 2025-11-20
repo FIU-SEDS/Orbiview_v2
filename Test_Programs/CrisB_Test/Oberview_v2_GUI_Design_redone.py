@@ -34,7 +34,9 @@ class Ui_MainWindow(object):
         self.gridLayout.addWidget(self.Graph3, 2, 0, 1, 1)
 
         #Comment: Selection colors are unncecessary can remove later
-        #Comment: Will remove 4th graph to replace with telemetry data later (on UI design)
+        #Comment: Will remove 4th graph and zoom-in to replace with telemetry data later (on UI design)
+        #Comment: Need to rename checkboxes and legends later
+        #Text for X Curve and Y Curve are swapped on labels
         self.ZoomButton1 = QtWidgets.QPushButton(parent=self.gridLayoutWidget)
         self.ZoomButton1.setStyleSheet("color: rgb(0, 0, 0);\n"
         "background-color: rgb(255, 255, 255);\n"

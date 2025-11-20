@@ -3,12 +3,12 @@ from ButtonFunctionality import ButtonFunctions
 from PlotData import PlotData
 from PyQt6.QtWidgets import QApplication, QWidget
 import sys
-import time
 
 class MainWindow(Ui_MainWindow, ButtonFunctions, PlotData, QWidget):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        self.setupButtons()
 
         self.zoomed_in = False  # Initial zoom state
 
@@ -18,9 +18,7 @@ class MainWindow(Ui_MainWindow, ButtonFunctions, PlotData, QWidget):
 
         self.plot()
         self.buttonClick()
-
-    def filterCurvies(self):
-        pass
+        self.checkbox_functionality()
         
 app = QApplication(sys.argv)
 window = MainWindow()

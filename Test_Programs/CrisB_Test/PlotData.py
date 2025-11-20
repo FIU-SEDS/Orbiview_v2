@@ -26,7 +26,21 @@ class PlotData:
         #Couple of suggestion: Graph titles, Axes titles (and units), grid lines
         #When UI file is done, implement these suggestions in UI file
 
-        #Graph 1 - Directional velocities
-        x_velocity_curve = self.Graph1.plot(time_elapsed, x_velocity, pen=pg.mkPen(color=(255, 0, 0), width=2), name="X Velocity")
-        y_velocity_curve = self.Graph1.plot(time_elapsed, y_velocity, pen=pg.mkPen(color=(0, 255, 0), width=2), name="Y Velocity")
-        z_velocity_curve = self.Graph1.plot(time_elapsed, z_velocity, pen=pg.mkPen(color=(0, 0, 255), width=2), name="Z Velocity")
+        #Graph 1 - Directional velocities --> Add further curves later
+        self.x_velocity_curve = self.Graph1.plot(time_elapsed, x_velocity, pen=pg.mkPen(color=(255, 0, 0, 255), width=2), name="X Velocity")
+        self.y_velocity_curve = self.Graph1.plot(time_elapsed, y_velocity, pen=pg.mkPen(color=(0, 255, 0, 255), width=2), name="Y Velocity")
+        self.z_velocity_curve = self.Graph1.plot(time_elapsed, z_velocity, pen=pg.mkPen(color=(0, 0, 255, 255), width=2), name="Z Velocity")
+        
+    def SearchCurves(self, selectedCheckbox):
+        #Make sure to add new checkboxes and curves here if more are added
+        self.checkbox_dictionary = {
+            self.CurveXCheckBox: self.x_velocity_curve,
+            self.CurveYCheckBox: self.y_velocity_curve,
+            self.CurveZCheckBox: self.z_velocity_curve
+        }
+
+        return(self.checkbox_dictionary[selectedCheckbox])
+
+        
+
+
