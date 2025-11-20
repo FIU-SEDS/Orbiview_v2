@@ -25,12 +25,14 @@ class ButtonFunctions(PlotData):
         self.ZoomButton1.clicked.connect(lambda: self.zoom_change(self.ZoomButton1, self.Graph1))
         self.ZoomButton2.clicked.connect(lambda: self.zoom_change(self.ZoomButton2, self.Graph2)) 
         self.ZoomButton3.clicked.connect(lambda: self.zoom_change(self.ZoomButton3, self.Graph3)) 
-        
         #Will be removed later
         self.ZoomButton4.clicked.connect(lambda: self.zoom_change(self.ZoomButton4, self.Graph4))
 
+
         #triggers for button color change function
-        self.ZoomButton1.pressed.connect(lambda: self.button_color_change(self.ZoomButton1))
+        for button in [self.ZoomButton1, self.ZoomButton2, self.ZoomButton3, self.ZoomButton4]:
+            button.pressed.connect(lambda b=button: b.setStyleSheet("color: rgb(0, 0, 0);\n" "background-color: rgb(153, 204, 255);\n"))
+            button.released.connect(lambda b=button: b.setStyleSheet("color: rgb(0, 0, 0);\n" "background-color: rgb(255, 255, 255);\n"))
     
     def zoom_change(self, selectedButton, selectedGraph):
         keep_widgets = {selectedButton, selectedGraph, self.centralwidget, self.gridLayoutWidget}
@@ -49,20 +51,13 @@ class ButtonFunctions(PlotData):
 
         self.zoomed_in = not self.zoomed_in
     
-    def button_color_change(self, selectedButton):
-        pass
-        #defaultStyleSheet = "color: rgb(0, 0, 0);\n" "background-color: rgb(255, 255, 255);\n"
-        #clickedStyleSheet = "color: rgb(0, 0, 0);\n" "background-color: rgb(153, 204, 255);\n"
-
-        #selectedButton.setStyleSheet(clickedStyleSheet)
-    
     def checkbox_functionality(self):
         for checkbox in self.checkboxes:
             checkbox.stateChanged.connect(lambda state, cb=checkbox: self.filterCurves(cb, state))
 
     def filterCurves(self, selectedCheckbox, state):
         corr_curve = self.SearchCurves(selectedCheckbox)
-        print(self.checkbox_dictionary[selectedCheckbox])
+        print(self.checkbox_dictionary[selectedCheckbox]) #Can remove later
         current_pen = corr_curve.opts['pen'] # Store the initial pen
         
         if state == QtCore.Qt.CheckState.Unchecked.value:
