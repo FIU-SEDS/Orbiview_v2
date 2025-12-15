@@ -30,6 +30,13 @@ class PlotData:
         self.x_velocity_curve = self.Graph1.plot(time_elapsed, x_velocity, pen=pg.mkPen(color=(255, 0, 0, 255), width=2), name="X Velocity")
         self.y_velocity_curve = self.Graph1.plot(time_elapsed, y_velocity, pen=pg.mkPen(color=(0, 255, 0, 255), width=2), name="Y Velocity")
         self.z_velocity_curve = self.Graph1.plot(time_elapsed, z_velocity, pen=pg.mkPen(color=(0, 0, 255, 255), width=2), name="Z Velocity")
+        self.Graph1.setTitle("Directional Velocities")
+
+        #Make sure to remove self.Graph4 if not used
+        for graph in [self.Graph1, self.Graph2, self.Graph3, self.Graph4]:
+            graph.showGrid(x=True, y=True)
+            graph.setLabel('bottom', 'Time Elapsed', 's')
+
         
     def SearchCurves(self, selectedCheckbox):
         #Make sure to add new checkboxes and curves here if more are added
