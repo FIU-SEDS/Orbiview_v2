@@ -30,6 +30,7 @@ class ButtonFunctions(PlotData):
 
 
         #triggers for button color change function
+        #remove self.ZoomButton4 later
         for button in [self.ZoomButton1, self.ZoomButton2, self.ZoomButton3, self.ZoomButton4]:
             button.pressed.connect(lambda b=button: b.setStyleSheet("color: rgb(0, 0, 0);\n" "background-color: rgb(153, 204, 255);\n"))
             button.released.connect(lambda b=button: b.setStyleSheet("color: rgb(0, 0, 0);\n" "background-color: rgb(255, 255, 255);\n"))
