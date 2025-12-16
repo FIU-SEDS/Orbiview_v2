@@ -32,7 +32,6 @@ class PlotData:
         self.z_velocity_curve = self.Graph1.plot(time_elapsed, z_velocity, pen=pg.mkPen(color=(0, 0, 255, 255), width=2), name="Z Velocity")
         self.Graph1.setTitle("Directional Velocities")
 
-        #Make sure to remove self.Graph4 if not used
         for graph in [self.Graph1, self.Graph2, self.Graph3]:
             graph.showGrid(x=True, y=True)
             graph.setLabel('bottom', 'Time Elapsed', 's')

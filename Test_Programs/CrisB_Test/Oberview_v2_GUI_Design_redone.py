@@ -176,14 +176,14 @@ class Ui_MainWindow(object):
         self.label_12.setStyleSheet("font: 600 12pt \"Segoe UI\";")
         self.label_12.setObjectName("label_12")
         self.SignalColorIcon = QtWidgets.QFrame(parent=self.TelemetryWidget)
-        self.SignalColorIcon.setGeometry(QtCore.QRect(380, 50, 21, 21))
+        self.SignalColorIcon.setGeometry(QtCore.QRect(350, 50, 21, 21))
         self.SignalColorIcon.setStyleSheet("    background-color: red;\n"
 "    border-radius: 10px;")
         self.SignalColorIcon.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
         self.SignalColorIcon.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
         self.SignalColorIcon.setObjectName("SignalColorIcon")
         self.frame_4 = QtWidgets.QFrame(parent=self.TelemetryWidget)
-        self.frame_4.setGeometry(QtCore.QRect(350, 50, 20, 21))
+        self.frame_4.setGeometry(QtCore.QRect(380, 50, 20, 21))
         self.frame_4.setStyleSheet("\n"
 "    background-color: white;\n"
 "    border-radius: 10px;")
@@ -235,7 +235,7 @@ class Ui_MainWindow(object):
         item.setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.tableWidget.setItem(0, 4, item)
         self.gridLayout.addWidget(self.TelemetryWidget, 3, 2, 1, 1)
-        #MainWindow.setCentralWidget(self.centralwidget)
+        MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
