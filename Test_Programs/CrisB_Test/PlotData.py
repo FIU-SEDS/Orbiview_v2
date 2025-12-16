@@ -33,7 +33,7 @@ class PlotData:
         self.Graph1.setTitle("Directional Velocities")
 
         #Make sure to remove self.Graph4 if not used
-        for graph in [self.Graph1, self.Graph2, self.Graph3, self.Graph4]:
+        for graph in [self.Graph1, self.Graph2, self.Graph3]:
             graph.showGrid(x=True, y=True)
             graph.setLabel('bottom', 'Time Elapsed', 's')
 

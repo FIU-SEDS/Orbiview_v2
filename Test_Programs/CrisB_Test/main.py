@@ -19,6 +19,7 @@ class MainWindow(Ui_MainWindow, ButtonFunctions, PlotData, QWidget):
         self.plot()
         self.buttonClick()
         self.checkbox_functionality()
+        #self.AlignWidgets()
         
 app = QApplication(sys.argv)
 window = MainWindow()

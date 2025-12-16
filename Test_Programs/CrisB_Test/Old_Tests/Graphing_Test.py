@@ -1,4 +1,4 @@
-#Will test PyQt6 Graphs here
+##This file was used for a seperate test. Not the main program
 import sys
 
 from PySide6 import QtWidgets 
