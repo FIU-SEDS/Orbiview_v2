@@ -1,4 +1,4 @@
-acceleration_x,acceleration_y,acceleration_z,gyro_x,gyro_y,gyro_z,time_elapsed,rocket_state,rssi,signal_to_noise
+acceleration x,acceleration y,acceleration z,gyro x,gyro y,gyro z,time elapsed,rocket state,rssi,signal to noise
 324,-177,1002,-11270,-10010,-28700,1,1,-74,-5.0
 -991,372,192,-2940,5880,10010,2,1,-68,-2.0
 -854,511,-7,490,-2030,-15680,3,1,-78,5.0
