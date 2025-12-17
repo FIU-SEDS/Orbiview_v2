@@ -235,7 +235,7 @@ class Ui_MainWindow(object):
         item.setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.tableWidget.setItem(0, 4, item)
         self.gridLayout.addWidget(self.TelemetryWidget, 3, 2, 1, 1)
-        MainWindow.setCentralWidget(self.centralwidget)
+        #MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)

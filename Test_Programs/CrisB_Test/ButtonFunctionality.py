@@ -10,10 +10,8 @@ class ButtonFunctions(PlotData):
 
     def setupButtons(self):
         #Temporary --> Just for renaming purpose
-        #self.GraphLegend1 = self.horizontalLayoutWidget_4 
-        #self.CurveXCheckBox = self.checkBox_4
-        #self.CurveYCheckBox = self.checkBox_5
-        #self.CurveZCheckBox = self.checkBox_6
+        self.AltitudeCheckBox = self.checkBox_7
+        self.RSSICheckBox = self.checkBox_8
 
         #Set all check boxes to false
         self.checkboxes = [checkbox for checkbox in self.findChildren(QtWidgets.QCheckBox)]
@@ -26,12 +24,7 @@ class ButtonFunctions(PlotData):
         self.ZoomButton2.clicked.connect(lambda: self.zoom_change(self.ZoomButton2, self.Graph2)) 
         self.ZoomButton3.clicked.connect(lambda: self.zoom_change(self.ZoomButton3, self.Graph3)) 
 
-        #Will be removed later
-        #self.ZoomButton4.clicked.connect(lambda: self.zoom_change(self.ZoomButton4, self.Graph4))
-
-
         #triggers for button color change function
-        #remove self.ZoomButton4 later
         for button in [self.ZoomButton1, self.ZoomButton2, self.ZoomButton3]:
             button.pressed.connect(lambda b=button: b.setStyleSheet("color: rgb(0, 0, 0);\n" "background-color: rgb(153, 204, 255);\n"))
             button.released.connect(lambda b=button: b.setStyleSheet("color: rgb(0, 0, 0);\n" "background-color: rgb(255, 255, 255);\n"))

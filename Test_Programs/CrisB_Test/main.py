@@ -1,10 +1,11 @@
 from Oberview_v2_GUI_Design_redone import Ui_MainWindow
 from ButtonFunctionality import ButtonFunctions
 from PlotData import PlotData
+from TelemetryData import TelemetrySetup
 from PyQt6.QtWidgets import QApplication, QWidget
 import sys
 
-class MainWindow(Ui_MainWindow, ButtonFunctions, PlotData, QWidget):
+class MainWindow(Ui_MainWindow, ButtonFunctions, PlotData, TelemetrySetup, QWidget):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
@@ -19,7 +20,8 @@ class MainWindow(Ui_MainWindow, ButtonFunctions, PlotData, QWidget):
         self.plot()
         self.buttonClick()
         self.checkbox_functionality()
-        #self.AlignWidgets()
+        self.setupTelemetry()
+        self.SetupTimers()
         
 app = QApplication(sys.argv)
 window = MainWindow()
