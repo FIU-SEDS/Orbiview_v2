@@ -1,13 +1,12 @@
 from Oberview_v2_GUI_Design_redone import Ui_MainWindow
 from PlotData import PlotData
-from PyQt6 import QtCore, QtGui, QtWidgets
+from PyQt6 import QtCore, QtWidgets
 from PyQt6.QtWidgets import QWidget
-from pyqtgraph import PlotWidget
 import pyqtgraph as pg
 
+zoomed_in = False  # Initial zoom state
+
 class ButtonFunctions(PlotData):
-
-
     def setupButtons(self):
         #Temporary --> Just for renaming purpose
         self.AltitudeCheckBox = self.checkBox_7
@@ -31,20 +30,21 @@ class ButtonFunctions(PlotData):
     
     def zoom_change(self, selectedButton, selectedGraph):
         keep_widgets = {selectedButton, selectedGraph, self.centralwidget, self.gridLayoutWidget}
+        global zoomed_in
 
-        if self.zoomed_in == False:
+        if zoomed_in == False:
             # Iterate over all child widgets in the window
             for widgets in self.findChildren(QWidget):
                 if widgets not in keep_widgets and widgets not in selectedGraph.findChildren(QWidget):
                     widgets.setVisible(False)
             selectedButton.setText("Zoom Out")
 
-        if self.zoomed_in == True:
+        if zoomed_in == True:
             for widgets in self.findChildren(QWidget):
                 widgets.setVisible(True)
             selectedButton.setText("Zoom In")
 
-        self.zoomed_in = not self.zoomed_in
+        zoomed_in = not zoomed_in
     
     def checkbox_functionality(self):
         for checkbox in self.checkboxes:

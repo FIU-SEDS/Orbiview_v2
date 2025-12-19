@@ -2,6 +2,8 @@ from Oberview_v2_GUI_Design_redone import Ui_MainWindow
 import numpy as np
 import os
 import pyqtgraph as pg
+from PyQt6.QtCore import QTimer
+import math
 
 #get the folder where flight data is
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -12,22 +14,23 @@ file_path = os.path.abspath(file_path)  # Make CSV file path absolute
 flightlogs = np.loadtxt(file_path, delimiter=",", skiprows=1)
 
 #Re-arrange data for plotting
-rows = np.arange(1, 21)
-flightlogs[0:20, 6] = rows
-time_elapsed = flightlogs[0:20, 6]
+number_of_rows = flightlogs.shape[0]
+rows = np.arange(1, number_of_rows + 1)
+flightlogs[:, 6] = rows
+time_elapsed = flightlogs[:, 6]
 
 #Define flightlogs data
-x_velocity = flightlogs[0:20, 0]
-y_velocity = flightlogs[0:20, 1]
-z_velocity = flightlogs[0:20, 2]
+x_velocity = flightlogs[:, 0]
+y_velocity = flightlogs[:, 1]
+z_velocity = flightlogs[:, 2]
 
 #placeholder --> Will get data from different/new file
-altitude = flightlogs[0:20, 4]
+altitude = flightlogs[:, 4]
 
-rssi_data = flightlogs[0:20, 8]
+rssi_data = flightlogs[:, 8]
 
 class PlotData:
-    def plot(self):
+    def Initialplot(self):
 
         #Graph 1 - Acceleration
         self.x_velocity_curve = self.Graph1.plot(time_elapsed, x_velocity, pen=pg.mkPen(color=(255, 0, 0, 255), width=2), name="X Velocity")
@@ -50,6 +53,7 @@ class PlotData:
             graph.showGrid(x=True, y=True)
             graph.setLabel('bottom', 'Time Elapsed', 's')
 
+        self.TimingUpdate()
         
     def SearchCurves(self, selectedCheckbox):
         #Make sure to add new checkboxes and curves here if more are added
@@ -60,13 +64,81 @@ class PlotData:
             self.AltitudeCheckBox: self.altitude_curve,
             self.RSSICheckBox: self.RSSI_curve
         }
-
         return(self.checkbox_dictionary[selectedCheckbox])
+    
+    def TimingUpdate(self):
+        #Sets up timer for updating plots
+        self.plot_timer = QTimer()
+        self.plot_timer.timeout.connect(self.UpdatePlots)
+        self.plot_timer.start(1000)  # Update every second
+
+    def UpdatePlots(self):
+#       #How can i optimize this function?
+        #Re-read data from flight logs CSV
+        global flightlogs
+        flightlogs = np.loadtxt(file_path, delimiter=",", skiprows=1)
+
+        #Re-arrange data for plotting
+        number_of_rows = flightlogs.shape[0]
+        rows = np.arange(1, number_of_rows + 1)
+        flightlogs[:, 6] = rows
+        time_elapsed = flightlogs[:, 6]
+
+        #Re-arrange data for plotting
+        x_velocity = flightlogs[:, 0]
+        y_velocity = flightlogs[:, 1]
+        z_velocity = flightlogs[:, 2]
+        altitude = flightlogs[:, 4]
+        rssi_data = flightlogs[:, 8]
+
+        #Updates plots based on current data
+        self.x_velocity_curve.setData(time_elapsed, x_velocity)
+        self.y_velocity_curve.setData(time_elapsed, y_velocity)
+        self.z_velocity_curve.setData(time_elapsed, z_velocity)
+        self.altitude_curve.setData(time_elapsed, altitude)
+        self.RSSI_curve.setData(time_elapsed, rssi_data)
+
+        self.UpdateTicks()
+
+    def UpdateTicks(self):
+        #Help determine max and min of graph to help create ticks
+        for graph in [self.Graph1, self.Graph2, self.Graph3]:
+            curves_in_graph = graph.listDataItems()
+            cross_zero_count = 0
+
+            if curves_in_graph == None:
+                continue
+
+            global_min = float("inf")
+            global_max = float("-inf")
+
+            for curve in curves_in_graph:
+                x,y = curve.getData()
+                
+                if y is None or len(y) == 0: #Ensures there are values for y
+                    continue
+
+                crosses_zero = (y.min() <= 0 and y.max() >= 0)
+                if crosses_zero == True:
+                    cross_zero_count += 1
+                crosses_zero = False
+
+                curve_min = y.min()
+                curve_max = y.max()
+
+                global_min = min(global_min, curve_min)
+                global_max = max(global_max, curve_max)
+            
+            axis = graph.getAxis('left')
+
+            if cross_zero_count > 0:
+                major_ticks = {(global_min, f"{math.floor(global_min)}"), (0, "0"), (global_max, f"{math.ceil(global_max)}")}
+            else:
+                major_ticks = {(global_min, f"{math.floor(global_min)}"), (global_max, f"{math.ceil(global_max)}")}
+            axis.setTicks([major_ticks])
+
+    #Might need to add more rows for time elapsed as new data entries are added
     
     #New goal: update data with built in timer
     #Comment: might need to add new add or change data file (and their paths) later on
         #Thus might need to change column indexes
-
-        
-
-

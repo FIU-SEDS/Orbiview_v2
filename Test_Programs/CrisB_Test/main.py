@@ -11,16 +11,14 @@ class MainWindow(Ui_MainWindow, ButtonFunctions, PlotData, TelemetrySetup, QWidg
         self.setupUi(self)
         self.setupButtons()
 
-        self.zoomed_in = False  # Initial zoom state
-
         #Window resize - could work some functionality later?
-        self.gridLayoutWidget.resize(1280, 720)
-        self.resize(1280, 720)
+        #These currently aren't necessary because mainwindow and centralwidget are already set to 1280x720 in the GUI design
+        #self.gridLayoutWidget.resize(1280, 720) 
+        #self.resize(1280, 720)
 
-        self.plot()
+        self.Initialplot()
         self.buttonClick()
         self.checkbox_functionality()
-        self.setupTelemetry()
         self.SetupTimers()
         
 app = QApplication(sys.argv)
