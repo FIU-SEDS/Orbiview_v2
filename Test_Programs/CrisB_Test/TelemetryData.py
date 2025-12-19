@@ -41,6 +41,7 @@ class TelemetrySetup:
 
     def searchforTelemetryData(self, column_name): #Will work on optimizing and fixing this function later
         #Searches for the correct column index based on the column name
+        #This does require table column names to be fundamentally the same as the file column headers <-- IMPORTANT
         header = np.genfromtxt(PlotData.file_path, delimiter=",", max_rows=1, dtype=str)
         
         global previous_error_message

@@ -56,11 +56,10 @@ class ButtonFunctions(PlotData):
         current_pen = corr_curve.opts['pen'] # Store the initial pen
         
         if state == QtCore.Qt.CheckState.Unchecked.value:
-            new_pen = pg.mkPen(color=(current_pen.color().red(), current_pen.color().green(), current_pen.color().blue(), 0), width = 2)
+            new_pen = pg.mkPen(color=(current_pen.color().red(), current_pen.color().green(), current_pen.color().blue(), 0), width = 2) #invisible curve
             corr_curve.setPen(new_pen)
-
         else: #Checked
-            new_pen = pg.mkPen(color=(current_pen.color().red(), current_pen.color().green(), current_pen.color().blue(), 255), width = 2)
+            new_pen = pg.mkPen(color=(current_pen.color().red(), current_pen.color().green(), current_pen.color().blue(), 255), width = 2) #visible curve
             corr_curve.setPen(new_pen)
         
         

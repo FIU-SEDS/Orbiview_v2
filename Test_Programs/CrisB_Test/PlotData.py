@@ -31,7 +31,6 @@ rssi_data = flightlogs[:, 8]
 
 class PlotData:
     def Initialplot(self):
-
         #Graph 1 - Acceleration
         self.x_velocity_curve = self.Graph1.plot(time_elapsed, x_velocity, pen=pg.mkPen(color=(255, 0, 0, 255), width=2), name="X Velocity")
         self.y_velocity_curve = self.Graph1.plot(time_elapsed, y_velocity, pen=pg.mkPen(color=(0, 255, 0, 255), width=2), name="Y Velocity")
@@ -113,7 +112,7 @@ class PlotData:
             global_max = float("-inf")
 
             for curve in curves_in_graph:
-                x,y = curve.getData()
+                x,y = curve.getData() #Just focus on y h
                 
                 if y is None or len(y) == 0: #Ensures there are values for y
                     continue
@@ -133,9 +132,12 @@ class PlotData:
 
             if cross_zero_count > 0:
                 major_ticks = {(global_min, f"{math.floor(global_min)}"), (0, "0"), (global_max, f"{math.ceil(global_max)}")}
+                minor_ticks = {(round(global_min/2), f"{round(global_min/2)}"), (round(global_max/2), f"{round(global_max/2)}")}
             else:
-                major_ticks = {(global_min, f"{math.floor(global_min)}"), (global_max, f"{math.ceil(global_max)}")}
-            axis.setTicks([major_ticks])
+                midpoint = (global_max + global_min)/2
+                major_ticks = {(global_min, f"{math.floor(global_min)}"), (midpoint, f"{midpoint}"), (global_max, f"{math.ceil(global_max)}")}
+                minor_ticks = {((global_min + midpoint)/2, f"{(global_min + midpoint)/2}"), ((global_max + midpoint)/2, f"{(global_max + midpoint)/2}")}
+            axis.setTicks([major_ticks, minor_ticks])
 
     #Might need to add more rows for time elapsed as new data entries are added
     
