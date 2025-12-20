@@ -5,7 +5,6 @@ import sys
 class MainWindow(Data_File, QWidget):
     def __init__(self):
         super().__init__()
-        self.ChooseFilePath()
         
 app = QApplication(sys.argv)
 window = MainWindow()
