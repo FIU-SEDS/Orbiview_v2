@@ -105,7 +105,7 @@ class PlotData:
             curves_in_graph = graph.listDataItems()
             cross_zero_count = 0
 
-            if curves_in_graph == None:
+            if curves_in_graph == None: ##Can I remove this???
                 continue
 
             global_min = float("inf")

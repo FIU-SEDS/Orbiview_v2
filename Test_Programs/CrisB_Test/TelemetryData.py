@@ -10,9 +10,8 @@ signalOn = False
 previous_error_message = ""
 
 class TelemetrySetup:
-    def SetupTimers(self):
+    def SetupTelemtryTimers(self):
         #Sets up timers for updating telemetry data and receiver/signal status
-
         #Create a timer 
         self.telemetrytimer = QTimer()
         self.telemetrytimer.timeout.connect(self.ReceiverAndSignalStatus)

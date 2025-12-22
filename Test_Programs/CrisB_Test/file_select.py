@@ -1,15 +1,14 @@
-from Oberview_v2_GUI_Design_redone import Ui_MainWindow
 from PyQt6.QtWidgets import QFileDialog
 from datetime import date
 import os
-import sys 
+import sys
+import csv
 
 class Data_File():
     def ChooseFolderPath(self):
-
         parent_folder = QFileDialog.getExistingDirectory(
             self,                                                # parent window
-            "Select parent directory for flightlogs folder",     # dialog title
+            "Select parent directory for flightlogs folder (new or existing)",     # dialog title
             ""                                                   # Starting directory ("" = default)
         )
 
@@ -18,20 +17,26 @@ class Data_File():
             #Builds directory for FlightLogs Folder
             self.flightlogs_folder_path = os.path.join(parent_folder, "FlightLogs_Folder")
             #Creates FlightLogs Folder
-            os.makedirs(self.flightlogs_folder_path, exist_ok = True) #If folder already exist, program won't crash
+            os.makedirs(self.flightlogs_folder_path, exist_ok = True) #If folder already exist, program won't crash and continues as normal
 
             self.CreateFile()
-        else:
+        else: #if no valid directory exists
             #Program closes
-            print("No path selected. Exiting program...")
+            print("No path selected. Exiting dashboard program...")
             #Will add UI notification later
             sys.exit()
     
-    def CreateFile(self): #if no valid directory exists        
-        file_directory = self.CreateFileDirectory() #includes file name
+    def CreateFile(self):         
+        self.data_file_directory = self.CreateFileDirectory() #includes file name
 
-        with open(file_directory, "w") as csv_file:
-            pass
+        #Create csv file
+        with open(self.data_file_directory, "w", newline="") as data_file: #'w' --> write mode creates the file
+            self.writer = csv.writer(data_file) #Creates writer object
+            self.headers = ["acceleration x", "acceleration y", "acceleration z", "altitude", "rssi"]
+
+            self.writer.writerow(self.headers)
+
+        #Will work on this function as next step --> Maybe set up columns with headers?
         
     def CreateFileDirectory(self):
         today = date.today()
@@ -43,19 +48,25 @@ class Data_File():
 
         while new_file_pending == True:
             if (today_launch_count < 1):
-                if os.path.exists(f"{self.flightlogs_folder_path}/{pending_file_name}.csv"):
+                #if os.path.exists(f"{self.flightlogs_folder_path}/{pending_file_name}.csv"):
+                if os.path.exists(os.path.join(self.flightlogs_folder_path, f"{pending_file_name}.csv")):
                     today_launch_count += 1
                 else:
                     new_file_pending = False
-                    file_dir = f"{self.flightlogs_folder_path}/{pending_file_name}.csv"
-            else:
-                if os.path.exists(f"{self.flightlogs_folder_path}/{pending_file_name}_Launch{today_launch_count}.csv"):
+                    #file_dir = f"{self.flightlogs_folder_path}/{pending_file_name}.csv"
+                    file_dir = os.path.join(self.flightlogs_folder_path, f"{pending_file_name}.csv")
+            else: #if today_launch_count >= 1
+                #if os.path.exists(f"{self.flightlogs_folder_path}/{pending_file_name}_Launch{today_launch_count}.csv"):
+                if os.path.exists(os.path.join(self.flightlogs_folder_path, f"{pending_file_name}_Launch{today_launch_count}.csv")):
                     today_launch_count += 1
                 else:
                     new_file_pending = False
-                    file_dir = f"{self.flightlogs_folder_path}/{pending_file_name}_Launch{today_launch_count}.csv"
+                    #file_dir = f"{self.flightlogs_folder_path}/{pending_file_name}_Launch{today_launch_count}.csv"
+                    file_dir = os.path.join(self.flightlogs_folder_path, f"{pending_file_name}_Launch{today_launch_count}.csv")
 
         return file_dir
         
+        #Utilized os.path.join to prevent potential file errors in Linux and Mac OS
+
         #Now will have to adjust the launch of some functions in main.py and PlotData accordingly
         #Might add file select button???
