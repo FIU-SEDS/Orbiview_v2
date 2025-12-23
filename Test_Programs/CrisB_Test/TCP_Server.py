@@ -1,22 +1,25 @@
 from file_select import Data_File
+import TCP_Client
 import socket 
 import threading 
 import re
 import random
 import csv
+import time
 
 bind_ip = "0.0.0.0" #Listens to any receiving connections 
 bind_port = 9999
-connection_established = False
+number_of_data_requests = 0
+server_task_complete = True
 
 class TCP_Server_Setup():
     def Server_Startup(self):
 
-        server = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
-        server.bind((bind_ip, bind_port)) 
+        self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
+        self.server.bind((bind_ip, bind_port)) 
         # we tell the server to start listening with 
         # a maximum backlog of connections set to 5 --> Might need to change later?
-        server.listen(5) 
+        self.server.listen(5) 
 
         print(f"[+] Listening on port {bind_ip} : {bind_port}")
 
@@ -32,45 +35,69 @@ class TCP_Server_Setup():
             client_socket.send("[Server --> Client] Ping received".encode()) 
 
             #-----Data Request starts-----
-            initial_data_request = client_socket.recv(4096)
-            print(f"[+] Received: {initial_data_request.decode()}")
+            self.Data_Request(client_socket)
 
-            message = initial_data_request.decode()
-            number_of_requested_rows = re.findall(r'\d+', message) #Will search for integers in message, but will output in an array
-            self.requested_rows = int(number_of_requested_rows[0])
-
-            self.previous_values = [] #Set previous values to nothing
-            for i in range(self.requested_rows):
-                self.Placeholder_Data()
-                print(self.new_values)
-                with open(self.data_file_directory, "a", newline = "") as data_file:
-                    self.writer = csv.writer(data_file) #Creates writer object
-                    self.writer.writerow(self.new_values)
-
-            #Might be able to call new function
-            #client_socket.close()                  
-
-        while connection_established == False: 
+        while True: 
             # client socket and address includes in server.acept()
-            client, addr = server.accept() #--> Blocks main thread until connection is established
-            #connection_established = True --> Remember this if we want server to close (which we might do later)
+            try:
+                client, addr = self.server.accept() #--> Blocks main thread until connection is established
+            except (WindowsError, OSError):
+                #force clean shutdown otherwise
+                self.Ensure_Clean_Shutdown()
+                return #used to terminate loop and exit function entirely
 
             print(f"[+] Accepted connection from: {addr[0]}:{addr[1]}")
             #spin up our client thread to handle the incoming data 
             client_handler = threading.Thread(target=handle_client, args=(client,)) #This allows for multiple simultaneous clients
             client_handler.start()
 
-        server.close()
-        print("[+] Server closed")
+            shutdown_handler = threading.Thread(target= self.Force_Shutdown, daemon = True) #This allows for shutdown to happen at any moment conditions are met
+            shutdown_handler.start()
 
+    def Data_Request(self, client_socket):
+        global number_of_data_requests
+        number_of_data_requests += 1
+
+        global server_task_complete
+        server_task_complete = False
+
+        while TCP_Client.message_sent  == False:
+            time.sleep(0.05) #Forces program to constantly recheck and stay put until message is sent
+
+        initial_data_request = client_socket.recv(4096)
+        print(f"[+] Received: {initial_data_request.decode()}")
+
+        message = initial_data_request.decode()
+        number_of_requested_rows = re.findall(r'\d+', message) #Will search for integers in message, but will output in an array
+        self.requested_rows = int(number_of_requested_rows[0])
+
+        if (number_of_data_requests == 1):
+            self.previous_values = [] #Set previous values to nothing
+
+        for i in range(self.requested_rows):
+            self.Placeholder_Data()
+            with open(self.data_file_directory, "a", newline = "") as data_file:
+                self.writer = csv.writer(data_file) #Creates writer object
+                self.writer.writerow(self.new_values) #Might move to later --> Writes down data figures
+                client_socket.send(f"[Server --> Client] new incoming values {self.new_values}".encode())
+                time.sleep(0.15)  
+        print(f"[+] Task completed: {self.requested_rows} new row(s) added") #doesnt happen immediately
+        server_task_complete = True
+
+        TCP_Client.message_sent = False
+
+        time.sleep(1) #This is NECESSARY for server_task_complete to be identified as true on client-side
+        self.Data_Request(client_socket)
+
+        
     def Placeholder_Data(self): 
         with open(self.data_file_directory, "r", newline="") as data_file: #"r" signigies read file; will only add onto file data
             data_file.seek(0) #moves reader back to the header row
-            next(data_file) #moves to the next line
+            next(data_file) #moves reader to the next line
 
             #Counts rows in file
             row_count = sum(1 for row in data_file)
-            print(f"[+] csv row count: {row_count}")
+            print(f"[+] csv data row count: {row_count}")
 
             self.new_values = [] #Set new values to nothing
 
@@ -94,5 +121,26 @@ class TCP_Server_Setup():
 
                 self.new_values.append(random_value)
 
-        self.previous_values = self.new_values
-    #return an array of random numbers?
+        self.previous_values = self.new_values #Sets previous values to the last made set of values as to compare in data creation
+
+    def Force_Shutdown(self):
+        while TCP_Client.server_shutting_down_signal == False:
+            time.sleep(0.05)
+        
+        try:
+            self.server.close()
+        except (WindowsError, OSError):
+            #force clean shutdown otherwise
+            self.Ensure_Clean_Shutdown()
+            return
+
+        print("[+] Server closed")
+
+    def Ensure_Clean_Shutdown(self):
+        if self.server:
+            try:
+                self.server.shutdown(socket.SHUT_RDWR)
+            except:
+                pass
+        self.server.close()
+        self.server = None

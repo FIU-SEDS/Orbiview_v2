@@ -8,6 +8,8 @@ from TCP_Server import TCP_Server_Setup
 from TCP_Client import TCPClient
 import sys
 import threading
+import subprocess
+import time
 
 class MainWindow(Ui_MainWindow, ButtonFunctions, PlotData, TelemetrySetup, Data_File, TCP_Server_Setup, TCPClient, QWidget):
     def __init__(self):
@@ -16,14 +18,13 @@ class MainWindow(Ui_MainWindow, ButtonFunctions, PlotData, TelemetrySetup, Data_
         self.ChooseFolderPath()
 
         #TCP Server launches
-        self.server_thread = threading.Thread(
-            target = self.Server_Startup,
-            daemon = True #If main program exits, this thread is killed as well
-        )
+        self.server_thread = threading.Thread(target = self.Server_Startup, daemon = True) #daemon --> If main program exits, this thread is killed as well
         self.server_thread.start()
+        time.sleep(2) #Wait 1 sec
 
         #TCP Client launches
-        self.Client_Setup() #FIX THIS
+        self.client_thread = threading.Thread(target = self.Client_Setup, daemon = True)
+        self.client_thread.start()
 
         #Program UI launches
         self.setupUi(self)
