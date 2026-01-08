@@ -104,7 +104,3 @@ class TCPClient():
                 print("That's not a valid number. Try again.")
 
         return number_of_requested_rows
-    
-        
-
-    
