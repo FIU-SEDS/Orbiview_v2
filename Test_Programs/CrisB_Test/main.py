@@ -1,19 +1,27 @@
+from Orbiview_V1 import PortSelectionDialog  # Just import it
 from Oberview_v2_GUI_Design_redone import Ui_MainWindow
 from ButtonFunctionality import ButtonFunctions
 from PlotData import PlotData
 from TelemetryData import TelemetrySetup
-from PyQt6.QtWidgets import QApplication, QWidget
 from file_select import Data_File
 from TCP_Server import TCP_Server_Setup
 from TCP_Client import TCPClient
+from PyQt6.QtWidgets import QApplication, QWidget
 import sys
 import threading
-import subprocess
 import time
+
 
 class MainWindow(Ui_MainWindow, ButtonFunctions, PlotData, TelemetrySetup, Data_File, TCP_Server_Setup, TCPClient, QWidget):
     def __init__(self):
         super().__init__()
+
+        dialog = PortSelectionDialog(self)
+        if dialog.exec():
+            port = dialog.get_selected_port()
+            baudrate = dialog.get_selected_baudrate()
+            print(f"Selected: {port} at {baudrate} baud")
+
         #File path is selected
         self.ChooseFolderPath()
 

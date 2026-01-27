@@ -9,7 +9,7 @@ import math
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
 #Reading data from flight logs CSV
-file_path = os.path.join(script_dir, "..", "..", "Flight_Test_Data", "Flight_Data_2025-04-12_10-59-03 copy.csv")
+file_path = os.path.join(script_dir, "..", "..", "Flight_Test_Data", "Flight_Data_2025-04-12_10-59-03 copy.csv") #WILL HAVE TO MODIFY WHEN ALTERING FILES
 file_path = os.path.abspath(file_path)  # Make CSV file path absolute
 flightlogs = np.loadtxt(file_path, delimiter=",", skiprows=1)
 

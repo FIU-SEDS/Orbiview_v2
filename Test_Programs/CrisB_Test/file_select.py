@@ -32,7 +32,7 @@ class Data_File():
         #Create csv file
         with open(self.data_file_directory, "w", newline="") as data_file: #'w' --> write mode creates the file
             self.writer = csv.writer(data_file) #Creates writer object
-            self.headers = ["acceleration x", "acceleration y", "acceleration z", "altitude", "rssi"]
+            self.headers = ["acceleration x", "acceleration y", "acceleration z", "altitude", "rssi", "time_elapsed"]
 
             self.writer.writerow(self.headers)
 

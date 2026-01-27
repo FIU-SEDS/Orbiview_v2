@@ -1,8 +1,7 @@
 import sys
-from PyQt6.QtWidgets import (QApplication, QDialog, QVBoxLayout, QHBoxLayout, 
-                            QLabel, QComboBox, QPushButton, QDialogButtonBox)
+from PyQt6.QtWidgets import (QDialog, QVBoxLayout, QHBoxLayout, QLabel, QComboBox, QPushButton, QDialogButtonBox)
 from PyQt6.QtGui import QFont
-from serial.tools import list_ports
+from serial.tools import list_ports #Not sure why there is a warning?
 
 
 class PortSelectionDialog(QDialog):
@@ -85,9 +84,10 @@ class PortSelectionDialog(QDialog):
         self.port_combo.clear()
         ports = sorted(list_ports.comports())
         
-        if not ports:
+        if not ports: #port == null
             self.port_combo.addItem("No ports found")
-            self.button_box.button(QDialogButtonBox.StandardButton.Ok).setEnabled(False)
+            #self.button_box.button(QDialogButtonBox.StandardButton.Ok).setEnabled(False)
+            #Create last check if you want programed launched
             #Create program launch without port --> Placeholder data
 
 
@@ -110,16 +110,21 @@ class PortSelectionDialog(QDialog):
         print("=" * 50)
         print("OK BUTTON WAS CLICKED!")
         print("=" * 50)
-        self.accept()
+        super().accept()
+    
+    def reject(self):
+        print("Canceling program launch...")
+        sys.exit()
 
 
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    dialog = PortSelectionDialog()
+# if __name__ == "__main__":
+#     app = QApplication(sys.argv)
+#     dialog = PortSelectionDialog()
     
-    if dialog.exec():
-        port = dialog.get_selected_port()
-        baudrate = dialog.get_selected_baudrate()
-        print(f"Selected: {port} at {baudrate} baud")
+#     if dialog.exec():
+#         port = dialog.get_selected_port()
+#         baudrate = dialog.get_selected_baudrate()
+#         print(f"Selected: {port} at {baudrate} baud")
     
-    sys.exit()
+#     sys.exit()
+#Not needed because of implementation in main

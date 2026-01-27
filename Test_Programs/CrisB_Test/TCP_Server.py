@@ -103,8 +103,9 @@ class TCP_Server_Setup():
 
             for header in self.headers:
                 column_index = self.headers.index(header)
-
-                if(row_count < 1):
+                if(column_index == 5):
+                    random_value = row_count #This is in creating the x-axis (time-elapsed) | Might need offset?
+                elif(row_count < 1):
                     #make initial values
                     if(column_index == 4): #if column_index is rssi
                         random_value = random.randint(-100, -50)
