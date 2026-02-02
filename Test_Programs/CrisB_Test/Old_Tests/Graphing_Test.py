@@ -47,7 +47,7 @@ class MainWindow(QtWidgets.QMainWindow):
             QPushButton:hover {
                 background-color: #666;
             }
-        """)
+        f""")
         self.toggle_button.move(1000, 20)  # Position top-right corner
         self.toggle_button.setFixedSize(80, 25)
         self.toggle_button.clicked.connect(self.toggle_curve)
