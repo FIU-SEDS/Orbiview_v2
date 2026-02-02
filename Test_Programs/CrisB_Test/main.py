@@ -1,4 +1,5 @@
-from Orbiview_V1 import PortSelectionDialog  # Just import it
+from Orbiview_V1 import PortSelectionDialog  
+from serial_reader import simple_serial_reader
 from Oberview_v2_GUI_Design_redone import Ui_MainWindow
 from ButtonFunctionality import ButtonFunctions
 from PlotData import PlotData
@@ -16,11 +17,12 @@ class MainWindow(Ui_MainWindow, ButtonFunctions, PlotData, TelemetrySetup, Data_
     def __init__(self):
         super().__init__()
 
+        #Oberview_V1 starting program launches - User selects baudrate and serial port
         dialog = PortSelectionDialog(self)
         if dialog.exec():
-            port = dialog.get_selected_port()
-            baudrate = dialog.get_selected_baudrate()
-            print(f"Selected: {port} at {baudrate} baud")
+            self.port = dialog.get_selected_port()
+            self.baudrate = dialog.get_selected_baudrate()
+            print(f"Selected: {self.port} at {self.baudrate} baud")
 
         #File path is selected
         self.ChooseFolderPath()
@@ -33,6 +35,11 @@ class MainWindow(Ui_MainWindow, ButtonFunctions, PlotData, TelemetrySetup, Data_
         #TCP Client launches
         self.client_thread = threading.Thread(target = self.Client_Setup, daemon = True)
         self.client_thread.start()
+
+
+        #Receiver waits and listens for data
+        data = simple_serial_reader(self.port, self.baudrate) #will test soon --> Might need to create new thread
+        print(data)  
 
         #Program UI launches
         self.setupUi(self)

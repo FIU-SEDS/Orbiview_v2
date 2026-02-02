@@ -3,6 +3,8 @@ from PyQt6.QtWidgets import (QDialog, QVBoxLayout, QHBoxLayout, QLabel, QComboBo
 from PyQt6.QtGui import QFont
 from serial.tools import list_ports #Not sure why there is a warning?
 
+#This script reconstructs the Obirview V1 launch program + UI to initiate the Obirview V2 program
+#Upon launch user is to select serial port and baud rate
 
 class PortSelectionDialog(QDialog):
     """Dialog for selecting a serial port"""
@@ -86,7 +88,9 @@ class PortSelectionDialog(QDialog):
         
         if not ports: #port == null
             self.port_combo.addItem("No ports found")
-            #self.button_box.button(QDialogButtonBox.StandardButton.Ok).setEnabled(False)
+
+            #self.button_box.button(QDialogButtonBox.StandardButton.Ok).setEnabled(False) <-- Disables OK button (will remove at the end)
+            
             #Create last check if you want programed launched
             #Create program launch without port --> Placeholder data
 
