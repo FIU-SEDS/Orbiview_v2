@@ -59,6 +59,7 @@ class TCPClient():
             time.sleep(0.05) #Ensures next method won't start until server finishes data task
 
         self.Request_Data(self.Prompt_User(True)) #Prompt user again for more rows --> If yes, creates loop
+        #perhaps here we need to create a data response array and have a return value????
 
     def Prompt_User(self, repeated_entry):
         if repeated_entry:

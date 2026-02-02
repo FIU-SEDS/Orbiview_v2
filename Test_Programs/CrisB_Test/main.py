@@ -27,6 +27,8 @@ class MainWindow(Ui_MainWindow, ButtonFunctions, PlotData, TelemetrySetup, Data_
         #File path is selected
         self.ChooseFolderPath()
 
+        #Only use placeholder data if no baudrate and serial port are selected
+
         #TCP Server launches
         self.server_thread = threading.Thread(target = self.Server_Startup, daemon = True) #daemon --> If main program exits, this thread is killed as well
         self.server_thread.start()
