@@ -61,7 +61,7 @@ class PortSelectionDialog(QDialog):
         self.baud_label.setFont(QFont("Arial", 11))
         self.baud_combo = QComboBox()
         self.baud_combo.addItems(["9600", "19200", "38400", "57600", "115200"])
-        self.baud_combo.setCurrentText("115200")
+        self.baud_combo.setCurrentText("115200") #default value baudrate 115200
         baud_layout.addWidget(self.baud_label)
         baud_layout.addWidget(self.baud_combo)
         layout.addLayout(baud_layout)
@@ -86,7 +86,7 @@ class PortSelectionDialog(QDialog):
         self.port_combo.clear()
         ports = sorted(list_ports.comports())
         
-        if not ports: #port == null
+        if not ports:
             self.port_combo.addItem("No ports found")
 
             #self.button_box.button(QDialogButtonBox.StandardButton.Ok).setEnabled(False) <-- Disables OK button (will remove at the end)

@@ -1,18 +1,18 @@
 import serial
 import time
 
-def simple_serial_reader(port="COM3", baudrate=115200): #default values listed
+def simple_serial_reader(callback, port="COM3", baudrate=115200): #default values selected
     """
     Simple function that:
     1. Connects to serial port
     2. Waits for data
     3. Returns parsed data when it arrives
     """
-    
+        
     # Step 2: CONNECT
     try:
         ser = serial.Serial(port=port, baudrate=baudrate, timeout=1)
-        print(f"Connected to {port}")
+        print(f"\nSelected: {port} at {baudrate} baud\n")
         time.sleep(2)  # Let connection stabilize
     except Exception as e:
         print(f"Failed to connect: {e}")
@@ -21,7 +21,8 @@ def simple_serial_reader(port="COM3", baudrate=115200): #default values listed
     # Step 3 & 4: WAIT and READ
     while True:
         try:
-            if ser.in_waiting:  # Data available?
+            if ser.in_waiting:  # Data available? --> Requires transmitter & receiver
+                print("Listening for data")
                 line = ser.readline().decode('utf-8').strip()
                 
                 if "+RCV=" in line:
@@ -45,7 +46,9 @@ def simple_serial_reader(port="COM3", baudrate=115200): #default values listed
                             }
                         }
                         
-                        return parsed_data  # Return it to YOUR code
+                        callback(parsed_data)
+            else:
+                print(f"---No receiver and/or transmitter---")
             
             time.sleep(0.05)  # Small delay
             

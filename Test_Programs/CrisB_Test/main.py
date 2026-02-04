@@ -22,7 +22,6 @@ class MainWindow(Ui_MainWindow, ButtonFunctions, PlotData, TelemetrySetup, Data_
         if dialog.exec():
             self.port = dialog.get_selected_port()
             self.baudrate = dialog.get_selected_baudrate()
-            print(f"Selected: {self.port} at {self.baudrate} baud")
 
         #File path is selected
         self.ChooseFolderPath()
@@ -38,10 +37,9 @@ class MainWindow(Ui_MainWindow, ButtonFunctions, PlotData, TelemetrySetup, Data_
         self.client_thread = threading.Thread(target = self.Client_Setup, daemon = True)
         self.client_thread.start()
 
-
-        #Receiver waits and listens for data
-        data = simple_serial_reader(self.port, self.baudrate) #will test soon --> Might need to create new thread
-        print(data)  
+        #Create thread for serial reader
+        self.seriaL_thread = threading.Thread(target = simple_serial_reader, args = (self.handle_serial_data, self.port, self.baudrate), daemon = True)
+        self.seriaL_thread.start()
 
         #Program UI launches
         self.setupUi(self)
@@ -59,6 +57,21 @@ class MainWindow(Ui_MainWindow, ButtonFunctions, PlotData, TelemetrySetup, Data_
         #Initial data and graphs are implemented, then program starts checking for new data
         self.Initialplot()
         self.SetupTelemtryTimers()
+
+    #Confirms data is picked up
+    def handle_serial_data(self, data):
+        """Called automatically every time serial data arrives"""
+
+        if data == None:
+            print("Warning: received no data!")
+            return #exit function early
+
+        print(f"Received data: {data}")
+
+        # Extract values
+        #accel_x = data['sensor_data']['accel_x']
+        #altitude = data['sensor_data']['altitude']
+        #receiver_status = data['status']['receiver']
         
 app = QApplication(sys.argv)
 window = MainWindow()

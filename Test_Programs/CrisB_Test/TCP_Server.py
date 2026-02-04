@@ -79,7 +79,7 @@ class TCP_Server_Setup():
             with open(self.data_file_directory, "a", newline = "") as data_file:
                 self.writer = csv.writer(data_file) #Creates writer object
                 self.writer.writerow(self.new_values) #Might move to later --> Writes down data figures
-                client_socket.send(f"[Server --> Client] new incoming values {self.new_values}".encode())
+                client_socket.send(f"[+] incoming values for client: {self.new_values}".encode())
                 time.sleep(0.15)  
         print(f"[+] Task completed: {self.requested_rows} new row(s) added") #doesnt happen immediately
         server_task_complete = True
