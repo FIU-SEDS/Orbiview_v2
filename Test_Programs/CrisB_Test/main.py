@@ -1,5 +1,5 @@
 from Orbiview_V1 import PortSelectionDialog  
-from serial_reader import simple_serial_reader
+from serial_reader import SerialReader  
 from Oberview_v2_GUI_Design_redone import Ui_MainWindow
 from ButtonFunctionality import ButtonFunctions
 from PlotData import PlotData
@@ -13,9 +13,20 @@ import threading
 import time
 
 
-class MainWindow(Ui_MainWindow, ButtonFunctions, PlotData, TelemetrySetup, Data_File, TCP_Server_Setup, TCPClient, QWidget):
+class MainWindow(Ui_MainWindow, ButtonFunctions, PlotData, TelemetrySetup, Data_File, TCP_Server_Setup, TCPClient, SerialReader, QWidget):
     def __init__(self):
         super().__init__()
+        
+        #Create data values
+        self.accel_x_data = []
+        self.accel_y_data = []
+        self.accel_z_data = []
+        self.altitude_data = []
+        self.rssi_data = []
+        self.time_data = []
+        self.receiver_history = []
+        self.signal_history = []
+        self.data_arrays = [self.accel_x_data, self.accel_y_data, self.accel_z_data, self.altitude_data, self.rssi_data, self.time_data, self.receiver_history, self.signal_history]
 
         #Oberview_V1 starting program launches - User selects baudrate and serial port
         dialog = PortSelectionDialog(self)
@@ -38,8 +49,8 @@ class MainWindow(Ui_MainWindow, ButtonFunctions, PlotData, TelemetrySetup, Data_
         self.client_thread.start()
 
         #Create thread for serial reader
-        self.seriaL_thread = threading.Thread(target = simple_serial_reader, args = (self.handle_serial_data, self.port, self.baudrate), daemon = True)
-        self.seriaL_thread.start()
+        self.serial_thread = threading.Thread(target = self.simple_serial_reader, args = (self.port, self.baudrate), daemon = True)
+        self.serial_thread.start()
 
         #Program UI launches
         self.setupUi(self)
@@ -57,21 +68,6 @@ class MainWindow(Ui_MainWindow, ButtonFunctions, PlotData, TelemetrySetup, Data_
         #Initial data and graphs are implemented, then program starts checking for new data
         self.Initialplot()
         self.SetupTelemtryTimers()
-
-    #Confirms data is picked up
-    def handle_serial_data(self, data):
-        """Called automatically every time serial data arrives"""
-
-        if data == None:
-            print("Warning: received no data!")
-            return #exit function early
-
-        print(f"Received data: {data}")
-
-        # Extract values
-        #accel_x = data['sensor_data']['accel_x']
-        #altitude = data['sensor_data']['altitude']
-        #receiver_status = data['status']['receiver']
         
 app = QApplication(sys.argv)
 window = MainWindow()

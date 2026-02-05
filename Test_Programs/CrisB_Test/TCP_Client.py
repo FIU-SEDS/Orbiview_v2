@@ -26,7 +26,7 @@ class TCPClient():
         print(response.decode())
 
         #Request data here
-        self.Request_Data(self.Prompt_User(False)) #integer here is merely for testing --> Prompt user?
+        self.Request_Data(self.Prompt_User(False)) 
 
     def Request_Data(self, requested_rows):
         global message_sent

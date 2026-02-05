@@ -6,8 +6,8 @@ from serial.tools import list_ports #Not sure why there is a warning?
 #This script reconstructs the Obirview V1 launch program + UI to initiate the Obirview V2 program
 #Upon launch user is to select serial port and baud rate
 
-class PortSelectionDialog(QDialog):
-    """Dialog for selecting a serial port"""
+class PortSelectionDialog(QDialog): 
+    """Dialog for selecting a serial port""" #We need to remove the __init__ and super()
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setWindowTitle("Select Serial Port")
@@ -104,15 +104,15 @@ class PortSelectionDialog(QDialog):
         """Return the currently selected port"""
         if self.port_combo.currentText() == "No ports found":
             return None
-        return self.port_combo.currentText().split(" - ")[0]
+        return self.port_combo.currentText().split(" - ")[0] #Might need to change to self variable
     
     def get_selected_baudrate(self):
         """Return the selected baud rate as an integer"""
-        return int(self.baud_combo.currentText())
+        return int(self.baud_combo.currentText()) #Might need to change to self variable
     
     def accept(self):
         print("=" * 50)
-        print("OK BUTTON WAS CLICKED!")
+        print("Launching Oberview_V2 Dashboard Program")
         print("=" * 50)
         super().accept()
     
