@@ -34,6 +34,7 @@ class SerialReader():
                         values = clean_data.split(',')
                         
                         if len(values) >= 8: #Protects against corrupted / incomplete serial data
+                            #MIGHT NEED TO CHANGE LIST ORDER
                             parsed_data = {
                                 'sensor_data': {
                                     'accel_x': float(values[0]),
@@ -43,7 +44,7 @@ class SerialReader():
                                     'rssi': float(values[4]),
                                     'time': int(values[5])
                                 },
-                                'status': {
+                                'status': { #MIGHT REMOVE - might detect values based on activity / inactivity of data
                                     'receiver': values[6],  # "ON" or "OFF"
                                     'signal': values[7]     # "ON" or "OFF"
                                 }
